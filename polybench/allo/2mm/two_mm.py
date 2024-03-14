@@ -18,8 +18,8 @@ def two_mm_np(A, B, C, D, alpha, beta):
 
 
 def two_mm(concrete_type, p, r, q, s):
-    alpha = 0.1
-    beta = 0.5
+    alpha = 1
+    beta = 5
 
     def mm1[
         T: (int32, int32), P: int32, Q: int32, R: int32
