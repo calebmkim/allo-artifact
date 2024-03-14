@@ -6,7 +6,7 @@ import json
 import pytest
 import allo
 import numpy as np
-from allo.ir.types import int32, float32
+from allo.ir.types import int32, float32, Fixed
 import allo.ir.types as T
 
 
@@ -93,7 +93,7 @@ def test_two_mm():
     Q = psize["two_mm"][test_psize]["Q"]
     R = psize["two_mm"][test_psize]["R"]
     S = psize["two_mm"][test_psize]["S"]
-    sch = two_mm(int32, P, R, Q, S)
+    sch = two_mm(Fixed(32,0), P, R, Q, S)
     # code = sch.build(target="vitis_hls", mode="hw", project="2mm.prj")
     code = sch.build(target="vitis_hls")
     print(code)
