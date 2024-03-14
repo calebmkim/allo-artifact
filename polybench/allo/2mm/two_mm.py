@@ -6,7 +6,7 @@ import json
 import pytest
 import allo
 import numpy as np
-from allo.ir.types import int32, float32, Fixed
+from allo.ir.types import int32, Fixed
 import allo.ir.types as T
 
 
@@ -22,27 +22,27 @@ def two_mm(concrete_type, p, r, q, s):
     beta = 0.5
 
     def mm1[
-        T: (Fixed(32,0), int32), P: int32, Q: int32, R: int32
+        T: (Fixed(32,16), int32), P: int32, Q: int32, R: int32
     ](A: "T[P, Q]", B: "T[Q, R]", out_AB: "T[P, R]"):
         for i0, j0 in allo.grid(P, R, name="mm1"):
             for k0 in allo.reduction(Q):
                 out_AB[i0, j0] += A[i0, k0] * B[k0, j0]
 
     def mm2[
-        T: (Fixed(32,0), int32), P: int32, R: int32, S: int32
+        T: (Fixed(32,16), int32), P: int32, R: int32, S: int32
     ](out_AB: "T[P, R]", C: "T[R, S]", out_ABC: "T[P, S]"):
         for i1, j1 in allo.grid(P, S, name="mm2"):
             for k1 in allo.reduction(R):
                 out_ABC[i1, j1] += out_AB[i1, k1] * C[k1, j1]
 
     def ele_add[
-        T: (Fixed(32,0), int32), P: int32, S: int32
+        T: (Fixed(32,16), int32), P: int32, S: int32
     ](out_ABC: "T[P, S]", D: "T[P, S]", output: "T[P, S]"):
         for i2, j2 in allo.grid(P, S):
             output[i2, j2] = out_ABC[i2, j2] * beta + D[i2, j2] * alpha
 
     def kernel_2mm[
-        T: (Fixed(32,0), int32), P: int32, R: int32, Q: int32, S: int32
+        T: (Fixed(32,16), int32), P: int32, R: int32, Q: int32, S: int32
     ](A: "T[P, Q]", B: "T[Q, R]", C: "T[R, S]", D: "T[P, S]") -> "T[P, S]":
         out_AB: T[P, R]
         out_ABC: T[P, S]
@@ -93,7 +93,7 @@ def test_two_mm():
     Q = psize["two_mm"][test_psize]["Q"]
     R = psize["two_mm"][test_psize]["R"]
     S = psize["two_mm"][test_psize]["S"]
-    sch = two_mm(Fixed(32,0), P, R, Q, S)
+    sch = two_mm(Fixed(32,16), P, R, Q, S)
     # code = sch.build(target="vitis_hls", mode="hw", project="2mm.prj")
     code = sch.build(target="vitis_hls")
     print(code)
