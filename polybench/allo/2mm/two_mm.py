@@ -95,7 +95,7 @@ def test_two_mm():
     S = psize["two_mm"][test_psize]["S"]
     sch = two_mm(float32, P, R, Q, S)
     # code = sch.build(target="vitis_hls", mode="hw", project="2mm.prj")
-    code = sch.build(target="vitis_hls")
+    code = sch.build(target="vitis_hls", mode="hw")
     print(code)
 
 if __name__ == "__main__":
