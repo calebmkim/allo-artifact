@@ -96,6 +96,7 @@ def test_two_mm():
     sch = two_mm(float32, P, R, Q, S)
     # code = sch.build(target="vitis_hls", mode="hw", project="2mm.prj")
     code = sch.build(target="vitis_hls")
+    print(code)
 
 if __name__ == "__main__":
     test_two_mm()
